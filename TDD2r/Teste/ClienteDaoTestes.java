@@ -1,6 +1,5 @@
 import DAO.ClientesDao;
 import DOMAIN.Cliente;
-import DOMAIN.Produto;
 import EXCEPTIONS.DaoException;
 import EXCEPTIONS.ElementTypeNotFound_Exception;
 import EXCEPTIONS.MoreThanOneRegister_Exception;
@@ -39,6 +38,7 @@ public class ClienteDaoTestes {
         cliente2.setEstado(estado);
         cliente2.setCidade(cidade);
         cliente2.setTel(telefone);
+        cliente2.setSituacao(Cliente.Situacao.LIBERADO);
 
         Assert.assertTrue(this.clientesDao.cadastrar(cliente2));
     }
@@ -77,6 +77,13 @@ public class ClienteDaoTestes {
         Assert.assertTrue(clientesDao.alterar(clienteC));
 
         Assert.assertEquals("Matheus Felipe O. Mattos",clientesDao.consultar("09645206642").getNome());
+    }
+
+    @Test
+    public void atualizarSituacaoCliente() throws MoreThanOneRegister_Exception, TableException, ElementTypeNotFound_Exception, DaoException {
+
+        Cliente clienteC = clientesDao.consultar("09645206642");
+        clientesDao.alterarSituacaoCliente(clienteC.getCpf(),"BLOQUEADO");
     }
 
 }

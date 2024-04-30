@@ -33,6 +33,8 @@ public class ClienteFactory implements PersistenceFactory {
             cliente.setNumero(String.valueOf(rs.getInt(("NUMERO"))));
             cliente.setCidade(rs.getString(("CIDADE")));
             cliente.setEstado(rs.getString(("ESTADO")));
+            cliente.setSituacao(Cliente.Situacao.valueOf(rs.getString("SITUACAO")));
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,e.getMessage());
             System.out.println(e.getErrorCode());

@@ -1,11 +1,20 @@
 package DAO;
 
 import DOMAIN.Cliente;
+import EXCEPTIONS.DaoException;
 import GENERICS.IClienteDao;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.format.SignStyle;
+import java.util.Locale;
 
 import GENERICS.*;
+import JDBC.ConnectionFactory;
+
+import javax.swing.*;
 
 public class ClientesDao extends GenericDao<Cliente> implements IClienteDao {
 
@@ -20,8 +29,8 @@ public class ClientesDao extends GenericDao<Cliente> implements IClienteDao {
 
     @Override
     protected String getQueryInsertion() {
-        return "INSERT INTO tb_Clientes (ID, NOME, CPF, TEL, ENDERECO, NUMERO, CIDADE, ESTADO) "+
-                "VALUES (nextval('sq_cliente'),?,?,?,?,?,?,?)";
+        return "INSERT INTO tb_Clientes (ID, NOME, CPF, TEL, ENDERECO, NUMERO, CIDADE, ESTADO,SITUACAO) "+
+                "VALUES (nextval('sq_cliente'),?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -31,7 +40,7 @@ public class ClientesDao extends GenericDao<Cliente> implements IClienteDao {
     
     @Override
     protected String getQueryUpdate() {
-        return "UPDATE tb_Clientes SET NOME=?, CPF=?, TEL=?, ENDERECO=?, NUMERO=?, CIDADE=?, ESTADO=? WHERE CPF = ?";
+        return "UPDATE tb_Clientes SET NOME=?, CPF=?, TEL=?, ENDERECO=?, NUMERO=?, CIDADE=?, ESTADO=? WHERE CPF = ?,SITUACAO =?";
     }
 
     @Override
@@ -44,6 +53,7 @@ public class ClientesDao extends GenericDao<Cliente> implements IClienteDao {
             st.setString(5, entity.getNumero());
             st.setString(6, entity.getCidade());
             st.setString(7, entity.getEstado());
+            st.setString(8,entity.getSituacao().name());
 
         } catch ( Exception e) {
             System.out.println(e.getMessage());
@@ -81,6 +91,45 @@ public class ClientesDao extends GenericDao<Cliente> implements IClienteDao {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void alterarSituacaoCliente(String cpf,String situacao) throws DaoException {
+
+        Cliente.Situacao situacaoByName = Cliente.Situacao.getSituacaoByName(situacao.toUpperCase().trim());
+
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("UPDATE tb_clientes set situacao=? WHERE cpf =?");
+            st.setString(1, String.valueOf(situacaoByName));
+            st.setString(2,cpf);
+            if (st.executeUpdate()>0){
+
+                JOptionPane.showMessageDialog(null,"Situação do cliente atualizada!");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage());
+            throw new DaoException();
+        } finally {
+            closeConnection(connection,st,null);
+        }
+    }
+
+    private static void closeConnection(Connection connection, PreparedStatement statement, ResultSet rs) {
+        try {
+            if (rs!=null && !rs.isClosed()){
+                rs.close();
+            }
+            if (statement!=null && !statement.isClosed()){
+                statement.close();
+            }
+            if (connection!=null && !connection.isClosed()){
+                connection.close();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
         }
     }
 }

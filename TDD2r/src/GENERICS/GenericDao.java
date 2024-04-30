@@ -3,6 +3,7 @@ package GENERICS;
 import ANOTATIONS.ColunaTabela;
 import ANOTATIONS.Tabela;
 import ANOTATIONS.TypeKey;
+import DOMAIN.Cliente;
 import EXCEPTIONS.DaoException;
 import EXCEPTIONS.ElementTypeNotFound_Exception;
 import EXCEPTIONS.MoreThanOneRegister_Exception;
@@ -40,7 +41,6 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
         try {
             stm = connection.prepareStatement(getQueryInsertion());
             setValuesQueryInsertion(stm, entity);
-
             if(stm.executeUpdate() > 0) {
                 try (ResultSet rs = stm.getGeneratedKeys()){
                     if (rs.next()) {
@@ -89,12 +89,15 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
             if (rs.next()) {
                 T entity = getTipoClasse().getConstructor(null).newInstance(null); /////
                 Field[] fields = entity.getClass().getDeclaredFields();
+
                 for (Field field : fields) {
+
                     if (field.isAnnotationPresent(ColunaTabela.class)) {
                         ColunaTabela coluna = field.getAnnotation(ColunaTabela.class);
                         String dbName = coluna.db_nome();
                         String javaSetName = coluna.java_nomeSet();
                         Class<?> classField = field.getType();
+
                         try {
                             Method method = entity.getClass().getMethod(javaSetName, classField);
                             setValuesByType( entity,  method,  rs,  dbName,  classField.getName());
@@ -105,6 +108,7 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
                         }
                     }
                 }
+
                 return entity;
             }
 
@@ -208,6 +212,9 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
         } else if (fieldType.equals(String.class.getTypeName())) {
             String val = resultSet.getString(dataBaseNomeColuna);
             method.invoke(persistence,val);
+        } else if (fieldType.equals(Cliente.Situacao.class.getTypeName())) {
+            String val = resultSet.getString(dataBaseNomeColuna);
+            method.invoke(persistence, Cliente.Situacao.valueOf(val));
         } else {
             throw new ElementTypeNotFound_Exception("Elemento não conhecido.");
         }

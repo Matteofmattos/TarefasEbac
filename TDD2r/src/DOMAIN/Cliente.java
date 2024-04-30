@@ -7,6 +7,20 @@ import GENERICS.Persistence;
 
 @Tabela(value = "tb_Clientes")
 public class Cliente implements Persistence {
+
+    public enum Situacao {
+
+        BLOQUEADO,LIBERADO;
+
+        public static Situacao getSituacaoByName(String situacao){
+            for (Situacao st : Situacao.values()){
+                if (st.name().equals(situacao)) return st;
+            }
+
+            return null;
+        }
+    }
+
     @ColunaTabela(db_nome = "id", java_nomeSet = "setID")
     private Long id;
 
@@ -32,6 +46,9 @@ public class Cliente implements Persistence {
     @ColunaTabela(db_nome = "estado", java_nomeSet = "setEstado")
     private String estado;
 
+    @ColunaTabela(db_nome = "situacao",java_nomeSet = "setSituacao")
+    private Situacao situacao;
+
     public Cliente(String nome, String cpf, String tel, String end, String numero, String cidade, String estado) {
         this.nome = nome;
         this.cpf = cpf;
@@ -47,46 +64,69 @@ public class Cliente implements Persistence {
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public String getCpf() {
         return cpf;
     }
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
     public String getTel() {
         return tel;
     }
+
     public void setTel(String tel) {
         this.tel = tel;
     }
+
     public String getEnd() {
         return end;
     }
+
     public void setEnd(String end) {
         this.end = end;
     }
+
     public String getNumero() {
         return numero;
     }
+
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
     public String getCidade() {
         return cidade;
     }
+
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
+
     public String getEstado() {
         return this.estado;
     }
+
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
+    }
+
     public Long getID() { return id;}
+
     @Override
     public void setID(Long id) {
         this.id = id;
@@ -98,6 +138,8 @@ public class Cliente implements Persistence {
                 ", end: " + end +
                 ", numero: " + numero +
                 ", cidade: " + cidade +
-                ", uf: " + estado;
+                ", uf: " + estado +
+                ", situacao: "+situacao.name();
+
     }
 }
