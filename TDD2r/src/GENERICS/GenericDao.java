@@ -143,12 +143,11 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(getQueryUpdate());
             setValuesQueryUpdate(preparedStatement,entity);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected> 0){
+            if (preparedStatement.executeUpdate()> 0){
                 return true;
             }
         } catch (SQLException e) {
-            throw new DaoException("Erro ao alterar objeto: "+e.getCause());
+            throw new DaoException("Erro ao alterar objeto: "+ e.getCause());
         }
         return false;
     }
@@ -166,7 +165,7 @@ public abstract class GenericDao<T extends Persistence> implements IGenericDao<T
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
-                Persistence persistence = getTipoClasse().getConstructor(null).newInstance(null);//
+                Persistence persistence = getTipoClasse().getConstructor((Class<?>) null).newInstance((Object) null);//
                 Field[] fields = persistence.getClass().getDeclaredFields();
                 for ( Field field: fields){
 

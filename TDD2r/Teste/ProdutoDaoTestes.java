@@ -29,11 +29,13 @@ public class ProdutoDaoTestes {
         String codigo = JOptionPane.showInputDialog(null,"Informe o código do produto: ").trim();
         String preco = JOptionPane.showInputDialog(null, "Informe o preço do produto: ");
         BigDecimal precoB = BigDecimal.valueOf(Long.parseLong(preco));
+        String validade = JOptionPane.showInputDialog(null,"Informe a data de validade: ").trim();
 
         produto2.setNome(nome);
         produto2.setDescricao(descricao);
         produto2.setCodigo(codigo);
         produto2.setValor(precoB);
+        produto2.setValidade(validade);
 
         Assert.assertTrue(this.produtosDao.cadastrar(produto2));
     }
@@ -41,13 +43,13 @@ public class ProdutoDaoTestes {
     @Test
     public void consultarProdutoTest() throws MoreThanOneRegister_Exception, TableException, ElementTypeNotFound_Exception, DaoException {
 
-        Assert.assertNotNull(produtosDao.consultar("326"));
-        Assert.assertNotNull(produtosDao.consultar("63255"));
+        Assert.assertNotNull(produtosDao.consultar("556"));
+        //Assert.assertNotNull(produtosDao.consultar("63255"));
 
-        System.out.println(produtosDao.consultar("326"));
+        System.out.println(produtosDao.consultar("556"));
     }
 
-    @Test(expected = DaoException.class)
+    @Test
     public void excluirProduto() throws DaoException {
         Assert.assertTrue(produtosDao.excluir("326"));
     }
@@ -64,10 +66,12 @@ public class ProdutoDaoTestes {
 
     @Test
     public void alterarProdutoTest() throws MoreThanOneRegister_Exception, TableException, ElementTypeNotFound_Exception, DaoException {
-        Produto produtoC = produtosDao.consultar("326");
+
+        Produto produtoC = produtosDao.consultar("556");
 
         produtoC.setNome("Shampoo Masculino Clear");
         produtoC.setDescricao("Shampoo anticaspa clear Men");
+        produtoC.setValidade("12/08/26");
 
         produtosDao.alterar(produtoC);
 

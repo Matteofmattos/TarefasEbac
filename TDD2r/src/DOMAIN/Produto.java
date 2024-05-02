@@ -27,11 +27,15 @@ public class Produto implements Persistence {
     @ColunaTabela(db_nome = "valor", java_nomeSet = "setValor")
     private BigDecimal valor;
 
-    public Produto(String codigo, String nome, String descricao, BigDecimal valor) {
+    @ColunaTabela(db_nome = "validade",java_nomeSet = "setValidade")
+    private String validade;
+
+    public Produto(String codigo, String nome, String descricao, BigDecimal valor, String validade) {
         this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
+        this.validade = validade;
     }
 
     public Produto( ) {
@@ -85,7 +89,15 @@ public class Produto implements Persistence {
     public String toString() {
         return "id: " + id +
                 ", codigo: " + codigo + ", nome: " + nome + ", descricao: "
-                + descricao + ", valor: " + valor;
+                + descricao + ", valor: " + valor + ", validade: "+validade;
+    }
+
+    public String getValidade() {
+        return validade;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
     }
 }
 

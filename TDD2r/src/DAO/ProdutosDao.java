@@ -19,8 +19,8 @@ public class ProdutosDao extends GenericDao<Produto> implements IProdutoDao {
 
     @Override
     protected String getQueryInsertion() {
-        return "INSERT INTO tb_Produtos (ID,CODIGO,NOME,DESCRICAO,VALOR) "+
-                "VALUES (nextval('sq_idproduto'),?,?,?,?)";
+        return "INSERT INTO tb_Produtos (ID,CODIGO,NOME,DESCRICAO,VALOR,VALIDADE) "+
+                "VALUES (nextval('sq_idproduto'),?,?,?,?,?)";
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ProdutosDao extends GenericDao<Produto> implements IProdutoDao {
     }
     @Override
     protected String getQueryUpdate() {
-        return "UPDATE tb_Produtos SET CODIGO=?, NOME=?, DESCRICAO =?, VALOR=? WHERE CODIGO =?,";
+        return "UPDATE tb_produtos SET NOME=?, DESCRICAO =?, VALOR=?, VALIDADE =? WHERE CODIGO =?";
     }
 
     @Override
@@ -39,6 +39,7 @@ public class ProdutosDao extends GenericDao<Produto> implements IProdutoDao {
             st.setString(2,entity.getNome());
             st.setString(3,entity.getDescricao());
             st.setBigDecimal(4,entity.getValor());
+            st.setString(5,entity.getValidade());
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -65,11 +66,12 @@ public class ProdutosDao extends GenericDao<Produto> implements IProdutoDao {
 
     @Override
     protected void setValuesQueryUpdate(PreparedStatement st, Produto entity)  {
+
         try{
-            st.setString(1,entity.getCodigo());
-            st.setString(2,entity.getNome());
-            st.setString(3,entity.getDescricao());
-            st.setBigDecimal(4,entity.getValor());
+            st.setString(1,entity.getNome());
+            st.setString(2,entity.getDescricao());
+            st.setBigDecimal(3,entity.getValor());
+            st.setString(4,entity.getValidade());
             st.setString(5,entity.getCodigo());
 
         } catch (Exception e){

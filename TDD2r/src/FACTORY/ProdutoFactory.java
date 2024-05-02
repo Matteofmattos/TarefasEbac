@@ -18,6 +18,7 @@ public class ProdutoFactory implements PersistenceFactory {
             produto.setValor(resultSet.getBigDecimal("valor_unitario"));
             produto.setCodigo(resultSet.getString("codigo_produto"));
             produto.setDescricao(resultSet.getString("descricao"));
+            produto.setValidade(resultSet.getString("validade"));
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,e.getMessage());
@@ -34,8 +35,9 @@ public class ProdutoFactory implements PersistenceFactory {
         String valor = JOptionPane.showInputDialog("Informe o valor do produto ").trim();
         String descricao = JOptionPane.showInputDialog("Informe a descrição do produto ").trim();
         BigDecimal valorDecimal = BigDecimal.valueOf(Long.parseLong(valor));
+        String validade = JOptionPane.showInputDialog(null,"Informe a data de validade: ").trim();
 
-        return new Produto(nome,codigo,descricao,valorDecimal);
+        return new Produto(nome,codigo,descricao,valorDecimal,validade);
     }
 
 }
