@@ -1,6 +1,6 @@
 package domain;
-
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_curso")
@@ -19,6 +19,9 @@ public class Curso {
 
     @Column(name = "descricao",length = 30)
     private String descricao;
+
+    @OneToMany(mappedBy = "curso")
+    private Set<Matricula> matriculas;
 
     public Long getId() {
         return id;
@@ -50,5 +53,13 @@ public class Curso {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Set<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(Set<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
 }

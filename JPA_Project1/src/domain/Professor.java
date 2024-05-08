@@ -1,6 +1,8 @@
 package domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_professor")
@@ -17,8 +19,20 @@ public class Professor {
     @Column(name = "RA",unique = true,nullable = false,length=15)
     private String ra;
 
-    @Column(name = "disciplina",length = 20)
-    private String disciplina;
+    @ManyToMany(mappedBy = "professores")
+    private List<Disciplina> disciplinas;
+
+    public Professor() {
+        this.disciplinas = new ArrayList<>();
+    }
+
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
+    }
+
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
 
     public Long getId() {
         return id;
@@ -44,11 +58,7 @@ public class Professor {
         this.ra = ra;
     }
 
-    public String getDisciplina() {
-        return disciplina;
-    }
-
-    public void setDisciplina(String disciplina) {
-        this.disciplina = disciplina;
+    public void addDisciplinas(Disciplina disciplina){
+        this.disciplinas.add(disciplina);
     }
 }
