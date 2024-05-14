@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,6 +33,10 @@ public class Curso {
 
     @OneToMany(mappedBy = "curso")
     private List<Matricula> matriculas;
+
+    public Curso() {
+        this.matriculas = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -71,5 +76,9 @@ public class Curso {
 
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
+    }
+
+    public void addMatricula(Matricula matricula){
+        this.matriculas.add(matricula);
     }
 }

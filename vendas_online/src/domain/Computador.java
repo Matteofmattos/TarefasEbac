@@ -22,9 +22,7 @@ public class Computador {
     @Column(name = "DESCRICAO", length = 100, nullable = false)
     private String descricao;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_aluno_computador",joinColumns = { @JoinColumn(name = "computador_fk")},
-            inverseJoinColumns={@JoinColumn(name = "aluno_fk")})
+    @ManyToMany(mappedBy = "computadores")
     private List<Aluno> alunos;
 
     public Computador() {

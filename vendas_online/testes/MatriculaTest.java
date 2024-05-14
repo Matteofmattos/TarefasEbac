@@ -37,8 +37,14 @@ public class MatriculaTest {
         mat.setDataMatricula(Instant.now());
         mat.setStatus("ATIVA");
         mat.setValor(200d);
-        mat.setCurso(criarCurso("A1"));
-        mat.setAluno(criarAluno("555"));
+
+        Curso curso = criarCurso("A1");
+        curso.addMatricula(mat);
+        mat.setCurso(curso);
+
+        Aluno aluno = criarAluno("555");
+        mat.setAluno(aluno);
+        aluno.setMatricula(mat);
 
         mat = matriculaDao.cadastrar(mat);
 
@@ -47,12 +53,14 @@ public class MatriculaTest {
 
     }
 
-    private Computador criarComputador(String codigo) {
+    private Computador criarComputador(String codigo,Aluno aluno) {
 
         Computador computador = new Computador();
+
         computador.setCodigo(codigo);
         computador.setDescricao("Descricação pc1");
         computador.setModelo("i5");
+        computador.add(aluno);
         return computador;
         //return computadorDao.cadastrar(computador);
     }
@@ -72,12 +80,14 @@ public class MatriculaTest {
         Aluno aluno = new Aluno();
         aluno.setCodigo(codigo);
         aluno.setNome("João");
-        aluno.add(criarComputador("6646B"));
-        aluno.add(criarComputador("4146C"));
 
-        computadorDao.cadastrar(criarComputador("6646B"));
-        computadorDao.cadastrar(criarComputador("4146C"));
-        
+        Computador computador1 = criarComputador("6646B", aluno);
+        Computador computador2 = criarComputador("4146C", aluno);
+
+        aluno.add(computador1);
+        aluno.add(computador2);
+
         return alunoDao.cadastrar(aluno);
+
     }
 }

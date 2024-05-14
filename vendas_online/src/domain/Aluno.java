@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "TB_ALUNO")
 public class Aluno {
+
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="aluno_seq")
     @SequenceGenerator(name="aluno_seq", sequenceName="sq_aluno", initialValue = 1, allocationSize = 1)
@@ -19,9 +20,11 @@ public class Aluno {
     private String nome;
 
     @OneToOne(mappedBy = "aluno")
-    private Matricula matriculas;
+    private Matricula matricula;
 
-    @ManyToMany(mappedBy = "alunos")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tb_aluno_computador",joinColumns = { @JoinColumn(name = "aluno_fk")},
+            inverseJoinColumns={@JoinColumn(name = "computador_fk")})
     private List<Computador> computadores;
 
     public Aluno() {
@@ -52,12 +55,12 @@ public class Aluno {
         this.nome = nome;
     }
 
-    public Matricula getMatriculas() {
-        return matriculas;
+    public Matricula getMatricula() {
+        return matricula;
     }
 
-    public void setMatriculas(Matricula matriculas) {
-        this.matriculas = matriculas;
+    public void setMatricula(Matricula matriculas) {
+        this.matricula = matriculas;
     }
 
     public List<Computador> getComputadores() {
